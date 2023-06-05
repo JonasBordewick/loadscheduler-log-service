@@ -20,9 +20,9 @@ func (log *Log) ToGRPC() *api.Log {
 
 func FromGRPC(log *api.Log) *Log {
 	return &Log{
-		Id: 0,
+		Id: int(log.Id),
 		Applicant: log.Applicant,
-		Timestamp: "0",
+		Timestamp: log.Timestamp,
 		Message: log.Message,
 	}
 }
