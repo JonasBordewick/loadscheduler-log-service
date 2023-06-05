@@ -22,6 +22,7 @@ var instance *DB
 func GetDBInstance() *DB {
 	if instance == nil {
 		var connStr = fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", DATABASE_USER, DATABASE_PASSWORD, DATABASE_HOST, DATABASE_PORT, DATABASE_NAME)
+		fmt.Println(connStr)
 		db, err := sql.Open("postgres", connStr)
 		if err != nil {
 			panic(err)
