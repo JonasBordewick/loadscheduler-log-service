@@ -1,4 +1,4 @@
-TAG ?= 0.0.1
+TAG ?= 0.0.2
 DOCKER_USERNAME ?= jbordewick
 DOCKER_REPOSITORY ?= loadscheduler-log-service
 
