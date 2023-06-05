@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package loadscheduler.log.service;
+
+option go_package = "service/api";
+
+
+service LogService {
+    rpc GetAllLogs(Empty) returns (stream Log);
+    rpc GetLogsFromApplicant(Request) returns (stream Log);
+    rpc WriteLog(Log) returns (Empty);
+}
+
+message Empty {
+
+}
+
+message Log {
+    int32 id = 1;
+    string applicant = 2;
+    string timestamp = 3;
+    string message = 4;
+}
+
+message Request {
+    string requestedApplicant = 1;
+}
