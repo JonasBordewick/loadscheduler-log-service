@@ -19,28 +19,42 @@ type LogServer struct {
 
 func (server *LogServer) mustEmbedUnimplementedConfiguratorAPIServer() {}
 
-func (server *LogServer) GetAllLogs(req *api.Empty, stream api.LogService_GetAllLogsServer) error {
+func (server *LogServer) GetAllLogs(context.Context, *api.Empty) (*api.Respone, error) {
 	logs, err := server.database.GetAllLogs()
 	if err != nil {
-		stream.Context().Done()
+		return &api.Respone{
+			Logs: []*api.Log{},
+		}, nil
 	}
+
+	parsed_logs := []*api.Log{}
+
 	for _, l := range logs {
-		stream.Send(l.ToGRPC())
+		parsed_logs = append(parsed_logs, l.ToGRPC())
 	}
-	stream.Context().Done()
-	return nil
+
+	return &api.Respone{
+		Logs: parsed_logs,
+	}, nil
 }
 
-func (server *LogServer) GetLogsFromApplicant(req *api.Request, stream api.LogService_GetLogsFromApplicantServer) error {
+func (server *LogServer) GetLogsFromApplicant(ctx context.Context, req *api.Request) (*api.Respone, error) {
 	logs, err := server.database.GetLogsFromApplicant(req.RequestedApplicant)
 	if err != nil {
-		stream.Context().Done()
+		return &api.Respone{
+			Logs: []*api.Log{},
+		}, nil
 	}
+
+	parsed_logs := []*api.Log{}
+
 	for _, l := range logs {
-		stream.Send(l.ToGRPC())
+		parsed_logs = append(parsed_logs, l.ToGRPC())
 	}
-	stream.Context().Done()
-	return nil
+
+	return &api.Respone{
+		Logs: parsed_logs,
+	}, nil
 }
 
 func (server *LogServer) WriteLog(ctx context.Context, log *api.Log) (*api.Empty, error) {

@@ -35,7 +35,7 @@ func GetDBInstance() *DB {
 			mutex: sync.Mutex{},
 		}
 	}
-	create_statements, err := read_and_parse_sql_file("/app/database/files/create.sql")
+	create_statements, err := read_and_parse_sql_file("./database/files/create.sql")
 	if err == nil {
 		for _, statement := range create_statements {
 			_, err := instance.db.Exec(statement)
@@ -78,7 +78,7 @@ func (db *DB) GetAllLogs() ([]*Log, error) {
 
 func (db *DB) GetLogsFromApplicant(applicant string) ([]*Log, error) {
 	statement_string := "SELECT * FROM logs WHERE applicant = $1;"
-	rows, err := db.db.Query(statement_string)
+	rows, err := db.db.Query(statement_string, applicant)
 	if err != nil {
 		rows.Close()
 		return nil, err
@@ -99,8 +99,11 @@ func (db *DB) GetLogsFromApplicant(applicant string) ([]*Log, error) {
 }
 
 func (db *DB) WriteLog(log *Log) error {
-	statement_string := "INSERT INTO logs(applicant, log_time, log_message) VALUES ($1, EXTRACT(epoch from NOW()), $2);"
+	statement_string := "INSERT INTO logs(applicant, log_time, log_message) VALUES ($1, NOW(), $2);"
 	_, err := db.db.Exec(statement_string, log.Applicant, log.Message)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 	return err
 }
 

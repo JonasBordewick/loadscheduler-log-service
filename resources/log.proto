@@ -6,8 +6,8 @@ option go_package = "service/api";
 
 
 service LogService {
-    rpc GetAllLogs(Empty) returns (stream Log);
-    rpc GetLogsFromApplicant(Request) returns (stream Log);
+    rpc GetAllLogs(Empty) returns (Respone);
+    rpc GetLogsFromApplicant(Request) returns (Respone);
     rpc WriteLog(Log) returns (Empty);
 }
 
@@ -24,4 +24,8 @@ message Log {
 
 message Request {
     string requestedApplicant = 1;
+}
+
+message Respone {
+    repeated Log logs = 1; 
 }
