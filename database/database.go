@@ -55,7 +55,7 @@ func (db *DB) Close() error {
 }
 
 func (db *DB) GetAllLogs() ([]*Log, error) {
-	statement_string := "SELECT * FROM logs;"
+	statement_string := "SELECT * FROM logs ORDER BY log_time;"
 	rows, err := db.db.Query(statement_string)
 	if err != nil {
 		rows.Close()
@@ -77,7 +77,7 @@ func (db *DB) GetAllLogs() ([]*Log, error) {
 }
 
 func (db *DB) GetLogsFromApplicant(applicant string) ([]*Log, error) {
-	statement_string := "SELECT * FROM logs WHERE applicant = $1;"
+	statement_string := "SELECT * FROM logs WHERE applicant = $1 ORDER BY log_time;"
 	rows, err := db.db.Query(statement_string, applicant)
 	if err != nil {
 		rows.Close()
